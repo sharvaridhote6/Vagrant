@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Linux & VM Notes</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 900px; margin: 30px auto; padding: 25px; background: #f9f9f9; color: #232323; }
+        h1, h2, h3 { color: #235390; }
+        h2, h3 { margin-top: 2em; }
+        ul, ol { margin-bottom: 1em; }
+        li { margin-bottom: 7px; }
+        code, pre { background: #e6ecf5; color: #01417c; padding: 2px 4px; border-radius: 4px;}
+        pre { padding: 8px 16px; }
+        .important { background:#ffe8c1; color: #725200; padding:2px 8px; border-radius:3px; font-weight:bold; }
+        table { border-collapse: collapse; margin-bottom: 1.5em;}
+        th, td { border: 1px solid #bbb; padding: 6px 12px; }
+        th { background: #f1f5fa; }
+        .section { margin-bottom: 2.2em;}
+    </style>
+</head>
+<body>
+
+<h1>Linux & Virtualization Notes</h1>
+
+<div class="section">
+    <h2>1. Setting up a VM Manually</h2>
+    <h3>ISO – Image of an Optical Disk</h3>
+    <ul>
+        <li><span class="important">ISO</span>: A file containing all data from a CD/DVD, providing necessary files for VM installation or recovery.</li>
+        <li>Replaces physical disks; VMs read ISO to create <b>bootable media</b> for troubleshooting/system recovery.</li>
+        <li>ISO is <b>used for the VM installation</b>, not the final OS. <span class="important">Remove</span> the ISO after OS installation (<code>storage → optical files → remove iso/disk file</code>) to prevent reinstall prompts.</li>
+        <li>Show all IP addresses on a system: <code>ip addr show</code></li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>2. PuTTY & Remote Access</h2>
+    <ul>
+        <li>In <b>NAT</b> mode, the VM uses a private network, not accessible publicly. Use <b>port forwarding</b> in network settings to access the VM.</li>
+        <li><b>PuTTY</b>: Open-source network client, enables secure remote access/file transfers and remote terminal (replaces VirtualBox GUI terminal).</li>
+        <li>Features: <b>SSH encryption</b>, copy-paste support, better terminal UX.</li>
+        <li>Allows administrators and developers to connect and execute commands securely on remote servers.</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>3. Setting up a VM with Vagrant</h2>
+    <h3>What is Vagrant?</h3>
+    <ul>
+        <li>Vagrant <b>manages and automates the lifecycle</b> of virtual machines, using command-line operations.</li>
+        <li>VM "boxes" are downloaded from the <b>Vagrant Cloud</b> and managed using a <b>Vagrantfile</b>.</li>
+    </ul>
+    <h3>Frequently Used File Commands</h3>
+    <ul>
+        <li><code>mkdir</code>: Create directory</li>
+        <li><code>cd &lt;dirname&gt;</code>: Change into directory</li>
+        <li><code>ls</code>: List content of directory</li>
+        <li><code>cd ..</code>: Go up one directory</li>
+        <li><code>pwd</code>: Print working directory (current path)</li>
+    </ul>
+    <h3>Core Vagrant Workflow</h3>
+    <ul>
+        <li><code>vagrant up</code>: Main command to create/configure/start VM. Downloads box if needed, sets up SSH, configures and boots VM.</li>
+        <li><code>vagrant ssh</code>: Log into VM via SSH.</li>
+        <li><b>Vagrantfile</b>: Ruby config file defining:
+            <ul>
+                <li>Base box (e.g., <code>geerlingguy/centos7</code>)</li>
+                <li>Memory, CPU assignment</li>
+                <li>Port forwarding</li>
+                <li>Synced host/guest folders</li>
+                <li>Provision scripts</li>
+                <li>Network options</li>
+            </ul>
+        </li>
+        <li><code>whoami</code>: Show current user in session.</li>
+        <li><code>sudo -i</code>: Switch to root user.</li>
+        <li><code>exit</code>: Log out.</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>4. Linux Basics</h2>
+    <ul>
+        <li><b>Open source OS</b>. Everything is a file. Strong philosophy for chaining single-purpose programs.</li>
+        <li><b>Main Directories:</b>
+            <ul>
+                <li><b>Home:</b> <code>/root</code>, <code>/home/username</code></li>
+                <li><b>User Executables:</b> <code>/bin</code>, <code>/usr/bin</code>, <code>/usr/local/bin</code></li>
+                <li><b>System Executables:</b> <code>/sbin</code>, <code>/usr/sbin</code>, <code>/usr/local/sbin</code></li>
+                <li><b>Other Mountpoints:</b> <code>/media</code>, <code>/mnt</code></li>
+                <li><b>Configuration:</b> <code>/etc</code></li>
+                <li><b>Temporary Files:</b> <code>/tmp</code></li>
+                <li><b>Kernel/Bootloader:</b> <code>/boot</code></li>
+                <li><b>Server Data:</b> <code>/var</code>, <code>/srv</code></li>
+                <li><b>System Info:</b> <code>/proc</code>, <code>/sys</code></li>
+                <li><b>Libraries:</b> <code>/lib</code>, <code>/usr/lib</code>, <code>/usr/local/lib</code></li>
+            </ul>
+        </li>
+        <li><b>Commands:</b> <code>mkdir</code>, <code>touch</code> (create files), <code>rmdir</code> (remove dirs).</li>
+    </ul>
+    <h3>Sample Command Usage</h3>
+    <h3>More File Operations</h3>
+<ul>
+    <li><b>Renaming files:</b> Use <code>mv</code> with a new name.
+        <ul>
+            <li><code>mv file2.txt file20.txt</code> <span class="important"># renames file2.txt to file20.txt</span></li>
+        </ul>
+    </li>
+    <li><b>Removing files and folders:</b>
+        <ul>
+            <li><code>rm file3.txt</code> <span class="important"># removes file3.txt</span></li>
+            <li><code>rm -r clouddir</code> <span class="important"># removes directory 'clouddir' and its contents</span></li>
+        </ul>
+    </li>
+    <li><b>Copying or moving multiple files with wildcards:</b>
+        <ul>
+            <li><code>cp file* /tmp/</code> <span class="important"># copies all files starting with 'file' to /tmp/</span></li>
+            <li><code>mv *txt testdir/</code> <span class="important"># moves all files ending with .txt to testdir/</span></li>
+        </ul>
+    </li>
+    <li><b>Dangerous: Delete everything in the current directory!</b>
+        <ul>
+            <li><code>rm -rf *</code> <span class="important" style="color:#a00"># <b>completely deletes</b> all files and directories here (use with caution!)</span></li>
+        </ul>
+    </li>
+</ul>
+
+    <pre>
+$ vagrant ssh
+[vagrant@vbox ~]$ sudo -i
+[root@vbox ~]# cd             # To root directory
+[root@vbox /]# ls             # List root contents
+[root@vbox /]# cd /bin        # Navigate by absolute path
+[root@vbox bin]# cd /tmp/
+[root@vbox tmp]# ls
+Abcde
+[root@vbox tmp]# cd
+[root@vbox ~]# ls /tmp/       # Can specify dir with ls
+Abcde
+
+[vagrant@vbox ~]$ mkdir testdir devopsdir clouddir backupdir
+[vagrant@vbox ~]$ touch file1.txt
+[vagrant@vbox ~]$ touch file{1..3}.txt
+[vagrant@vbox ~]$ ls
+backupdir  clouddir  devopsdir  file1.txt  file2.txt  file3.txt  testdir
+
+[vagrant@vbox ~]$ cp file1.txt backupdir/
+[vagrant@vbox tmp]$ cp /home/vagrant/file2.txt /home/vagrant/clouddir
+[vagrant@vbox ~]$ cp -r clouddir backupdir/
+[vagrant@vbox ~]$ mv file1.txt backupdir/
+[vagrant@vbox ~]$ cp --help     # Get all available options
+
+    </pre>
+</div>
+
+<div class="section">
+    <h2>5. OSI Model</h2>
+    <ul>
+        <li><b>OSI (Open Systems Interconnection)</b> model: Conceptual layers – Physical, Data Link, Network, Transport, Session, Presentation, Application.</li>
+        <li><b>Layer Functions:</b>
+            <ul>
+                <li><span class="important">Physical</span>: Hardware connectivity (e.g., cables)</li>
+                <li><span class="important">Data Link</span>: Error-free data transfer using MAC</li>
+                <li><span class="important">Network</span>: Routing, IP addressing</li>
+                <li><span class="important">Transport</span>: Segments data, reliability, retransmission, acknowledgment</li>
+                <li><span class="important">Session/Presentation/Application</span>: Security, encryption, data formatting to applications</li>
+            </ul>
+        </li>
+    </ul>
+    <h3>Layer Representation</h3>
+    <ul>
+        <li><b>Application</b>: Network Process to App</li>
+        <li><b>Presentation</b>: Data Representation, Encryption</li>
+        <li><b>Session</b>: Interhost Communication</li>
+        <li><b>Transport</b>: Segments, End-to-End reliability</li>
+        <li><b>Network</b>: Packets, Logical IP addressing</li>
+        <li><b>Data Link</b>: Frames, Physical & MAC addressing</li>
+        <li><b>Physical</b>: Bits, actual media/signal transmission</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>6. Devices by OSI Layer</h2>
+    <ul>
+        <li><b>Layer 1 (Physical):</b> Hub</li>
+        <li><b>Layer 2 (Data Link):</b> Switches, Bridges</li>
+        <li><b>Layer 3 (Network):</b> Router, Firewall</li>
+        <li><b>Layer 4 (Transport):</b> Gateway</li>
+        <li><b>Layers 5-7 (Session/Pres./App):</b> Mail/Web servers, browsers, client software</li>
+    </ul>
+    <ul>
+        <li><b>Hub</b>: Broadcasts incoming data to all other ports (doesn't know destination).</li>
+        <li><b>Switch</b>: Knows MAC addresses, sends data to correct destination.</li>
+        <li><b>Router</b>: Connects multiple networks, routes based on IP addresses, may link multiple switches.</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>7. Protocols by OSI Layer</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Layer</th>
+                <th>Protocols</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>5,6,7</td><td>DNS, DHCP, NTP, SNMP, HTTPS, FTP, SSH, Telnet, HTTP, POP3</td></tr>
+            <tr><td>4</td><td>TCP, UDP</td></tr>
+            <tr><td>3</td><td>IP, ICMP, IGMP</td></tr>
+            <tr><td>2</td><td>ARP (MAC), RARP</td></tr>
+            <tr><td>1</td><td>Ethernet, Token Ring</td></tr>
+        </tbody>
+    </table>
+    <ul>
+        <li><b>Network types:</b> WAN &gt; MAN &gt; LAN &gt; CAN (Campus) &gt; PAN (Personal, e.g., Bluetooth)</li>
+        <li><b>IPv4:</b> 32-bit address (4 octets of 8 bits; range: 0.0.0.0–255.255.255.255)</li>
+        <li><b>Private IP Ranges:</b>
+            <ul>
+                <li>Class C: 192.168.0.0 – 192.168.255.255</li>
+                <li>Class B: 172.16.0.0 – 172.31.255.255</li>
+                <li>Class A: 10.0.0.0 – 10.255.255.255</li>
+                <li>Outside these: <b>Public IP</b></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>8. TCP vs UDP</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>TCP</th>
+                <th>UDP</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Connection-oriented</td><td>Connectionless</td></tr>
+            <tr><td>Reliable, extensive error checking</td><td>Unreliable, checksum only</td></tr>
+            <tr><td>Acknowledgements sent</td><td>No acknowledgements</td></tr>
+            <tr><td>Slower, more overhead</td><td>Faster, efficient</td></tr>
+            <tr><td>Supports retransmission</td><td>No retransmission</td></tr>
+            <tr><td>Header: 20-60 bytes</td><td>Header: 8 bytes (fixed)</td></tr>
+            <tr><td>Heavyweight (3-way handshake)</td><td>Lightweight, no handshake</td></tr>
+            <tr><td>Examples: HTTP, FTP, Telnet, SMTP, DNS (TCP), SNMP</td><td>Examples: DNS (UDP), YouTube, Netflix, Google Meet, Skype</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>9. Common Protocols & Port Numbers</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Protocol</th>
+                <th>Default Port(s)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>FTP (File Transfer)</td><td>TCP 20, 21</td></tr>
+            <tr><td>SSH (Secure Shell)</td><td>TCP 22</td></tr>
+            <tr><td>Telnet</td><td>TCP 23</td></tr>
+            <tr><td>SMTP (Email)</td><td>TCP 25</td></tr>
+            <tr><td>DNS (Name Resolution)</td><td>UDP 53 / TCP 53</td></tr>
+            <tr><td>HTTP (Web)</td><td>TCP 80</td></tr>
+            <tr><td>POP (Email)</td><td>TCP 109, 110</td></tr>
+            <tr><td>SNMP (Mgmt)</td><td>TCP 161,162 &amp; UDP 161,162</td></tr>
+            <tr><td>HTTPS (Secure Web)</td><td>TCP 443</td></tr>
+            <tr><td>AFP/IP</td><td>TCP 447, 548</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>10. TCP/IP vs OSI Layer Mapping</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>TCP/IP Layer</th>
+                <th>OSI Layer(s)</th>
+                <th>Protocols</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Application</td><td>Application, Session, Presentation</td><td>Telnet, FTP, HTTP, SNMP, SMTP, DNS</td></tr>
+            <tr><td>Transport</td><td>Transport</td><td>TCP, UDP</td></tr>
+            <tr><td>Internet</td><td>Network</td><td>IP, ICMP</td></tr>
+            <tr><td>Network</td><td>Physical</td><td>-</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>11. Virtual Machine Assembly (Manual / Vagrant)</h2>
+    <h3>Manual Setup with PuTTY</h3>
+    <ol>
+        <li>Click <b>New</b>, set Name, Type, Subtype, Version, then <b>Create</b></li>
+        <li>Download ISO for OS type</li>
+        <li>Settings: <b>Storage</b> → Optical Drive → Choose ISO file → Enable <b>Live CD</b></li>
+        <li>Network: Expert settings → Add port forwarding with details</li>
+        <li>After installation, remove the ISO to avoid reinstallation on reboot</li>
+        <li>Connect with PuTTY using assigned IP &amp; port (as set in port forwarding)</li>
+    </ol>
+
+    <h3>Vagrant-Based Setup (using Git Bash recommended)</h3>
+    <ol>
+        <li>Go to <b>HashiCorp Vagrant Cloud</b> and select a box</li>
+        <li>Set directory path:
+            <ul>
+                <li><code>mkdir -p ~/vagrant-vms/centos7</code></li>
+                <li><code>cd /c/Users/sharv</code></li>
+                <li><code>cd vagrant-vms/centos7</code></li>
+            </ul>
+        </li>
+        <li>Initialize:
+            <ul>
+                <li><code>vagrant init geerlingguy/centos7</code> (creates Vagrantfile)</li>
+            </ul>
+        </li>
+        <li><code>vagrant up</code> (also powers on after shutdown)</li>
+        <li><code>vagrant ssh</code> (to log in)</li>
+        <li><code>vagrant halt</code> (powers off VM)</li>
+        <li><code>vagrant destroy</code> (deletes VM)</li>
+        <li><b>Note:</b> <code>vagrant up</code> can re-create VMs from configs, but will reset/delete previous instance.</li>
+        <li><code>vagrant box remove geerlingguy/centos7</code> (remove just this box; use <code>--all</code> for all)</li>
+        <li><code>vagrant reload</code> (reboot VM)</li>
+    </ol>
+    <p><b>~</b> is the <b>home directory</b>.</p>
+</div>
+
+</body>
+</html>
